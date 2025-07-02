@@ -11,10 +11,10 @@ import (
 
 var DefaultEnvVar = "SOCKS_PROXY_URL"
 
-// NewClientWithEnv returns an *http.Client using a SOCKS5 proxy URL
+// New returns an *http.Client using a SOCKS5 proxy URL
 // from the specified environment variable (or "SOCKS_PROXY_URL" if empty).
 // If the variable is unset or empty, a default http.Client is returned.
-func NewClientWithEnv(envVar string) (*http.Client, error) {
+func New(envVar string) (*http.Client, error) {
 	if envVar == "" {
 		envVar = DefaultEnvVar
 	}

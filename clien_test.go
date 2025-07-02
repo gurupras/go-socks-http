@@ -6,11 +6,11 @@ import (
 	"testing"
 )
 
-func TestNewClientWithEnv_DefaultNoEnvSet(t *testing.T) {
+func TestNew_DefaultNoEnvSet(t *testing.T) {
 	// Unset the default env var
 	os.Unsetenv(DefaultEnvVar)
 
-	client, err := NewClientWithEnv("")
+	client, err := New("")
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -23,10 +23,10 @@ func TestNewClientWithEnv_DefaultNoEnvSet(t *testing.T) {
 	}
 }
 
-func TestNewClientWithEnv_CustomEnvVar(t *testing.T) {
+func TestNew_CustomEnvVar(t *testing.T) {
 	const envVar = "CUSTOM_SOCKS_PROXY"
 	os.Unsetenv(envVar)
-	client, err := NewClientWithEnv(envVar)
+	client, err := New(envVar)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
@@ -38,12 +38,12 @@ func TestNewClientWithEnv_CustomEnvVar(t *testing.T) {
 	}
 }
 
-func TestNewClientWithEnv_InvalidProxyURL(t *testing.T) {
+func TestNew_InvalidProxyURL(t *testing.T) {
 	const envVar = "SOCKS_PROXY_URL"
 	os.Setenv(envVar, "%%%bad-url%%%")
 	defer os.Unsetenv(envVar)
 
-	client, err := NewClientWithEnv(envVar)
+	client, err := New(envVar)
 	if err == nil {
 		t.Fatal("expected error for invalid proxy URL, got nil")
 	}
@@ -52,13 +52,13 @@ func TestNewClientWithEnv_InvalidProxyURL(t *testing.T) {
 	}
 }
 
-func TestNewClientWithEnv_ValidProxyURL(t *testing.T) {
+func TestNew_ValidProxyURL(t *testing.T) {
 	const envVar = "SOCKS_PROXY_URL"
 	// This is a syntactically valid address (localhost:1080), but we don't actually connect.
 	os.Setenv(envVar, "socks5://127.0.0.1:1080")
 	defer os.Unsetenv(envVar)
 
-	client, err := NewClientWithEnv(envVar)
+	client, err := New(envVar)
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
